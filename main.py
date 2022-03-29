@@ -30,13 +30,13 @@ class FuncPanel(wx.Panel):
         self.SetBackgroundColour("Grey")
         self.data_list = []
         self.start = time.time()
-        self.time_limit = 2.0
+        self.time_limit = 1.5
         self.temp = ''
         self.result = 0
 
         #Creates a prompt character for the user to type in
         self.prompt_text = wx.StaticText(self, label=(''), pos=(270, 100), size=(100, 100), style=wx.ALIGN_CENTER)
-        self.prompt_font = wx.Font(pointSize= 60, family=wx.FONTFAMILY_DECORATIVE, style=wx.FONTSTYLE_ITALIC, weight=wx.FONTWEIGHT_NORMAL, underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
+        self.prompt_font = wx.Font(pointSize= 60, family=wx.FONTFAMILY_DEFAULT, style=wx.FONTSTYLE_MAX,  weight=wx.FONTWEIGHT_NORMAL, underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
         self.prompt_text.SetFont(self.prompt_font)
         self.refresh_list()
 
