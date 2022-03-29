@@ -49,6 +49,7 @@ class FuncPanel(wx.Panel):
             self.check_time()
             self.update_prompt()
 
+    # Check to see if the time is below the limit. If it is, remove that current prompt from the list
     def check_time(self):
         time_diff = time.time() - self.start
         print(time_diff)
@@ -57,6 +58,7 @@ class FuncPanel(wx.Panel):
             print(f"{temp_char} gone!")
             self.data_list.remove(temp_char)
 
+    # If there is data in the list update the prompt with the next random value from the list
     def update_prompt(self):
         if self.data_list:
             temp = random.choice(self.data_list)
@@ -66,6 +68,7 @@ class FuncPanel(wx.Panel):
             self.refresh_list()
         self.entry.SetValue('')
 
+    #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
         self.data_list = ['`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=']
         #self.data_list = ['a', 'b', 'c', 'd']
