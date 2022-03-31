@@ -93,8 +93,8 @@ class FuncPanel(wx.Panel):
 
     #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
-        #self.data_list = ['`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        self.data_list = ['a', 'b', 'c', 'd']
+        self.data_list = ['`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        #self.data_list = ['a', 'b', 'c', 'd']
         self.data_dict = {}
         self.init_dict()
         self.result = 0
@@ -107,7 +107,8 @@ class FuncPanel(wx.Panel):
 
     def get_result_string(self):
         return f"Your result is: {self.result}"
-    
+
+    # This resets the game back to its original starting position. 
     def start_round(self, e):
         self.prompt = 'Go'
         self.prompt_text.SetLabel(self.prompt)
