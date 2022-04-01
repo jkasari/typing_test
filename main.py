@@ -58,8 +58,6 @@ class FuncPanel(wx.Panel):
         self.restart()
 
 
-
-
     # check to see if the text in the entry matchs that in the prompt
     def change_prompt(self, e):
         if self.run:
@@ -70,8 +68,7 @@ class FuncPanel(wx.Panel):
                     self.check_time()
                     self.update_prompt()
         else:
-            pass
-            
+            pass   
             
 
     # Check to see if the time is below the limit. If it is, remove that current prompt from the list
@@ -91,13 +88,14 @@ class FuncPanel(wx.Panel):
             self.SetBackgroundColour("Green")
         else:
             self.SetBackgroundColour("Red")
-            self.data_dict[self.prompt] += 1
             self.result += 1
         self.Refresh()
+
 
     def check_time_round1(self, time_diff):
         self.data_dict[str(self.prompt)] = time_diff
         self.data_list.remove(self.prompt)
+
 
     # If there is data in the list update the prompt with the next random value from the list
     def update_prompt(self):
@@ -109,18 +107,30 @@ class FuncPanel(wx.Panel):
             self.restart()
         self.entry.SetValue('')
 
+
     #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
-        #self.data_list = ['`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        self.data_list = ['a', 'b', 'c', 'd']
+        self.data_list = ['`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        #self.data_list = ['a', 'b', 'c', 'd']
         self.data_dict = {}
         self.init_dict()
         self.result = 0
     
     def calibrate_list(self):
+        big_list = []
+        count = 0
         for i in self.data_dict:
-            for j in range(int(self.data_dict[i] * 4)):
-                self.data_list.append(i)
+            for _ in range(int(self.data_dict[i] * 4)):
+                big_list.append(i)
+        random.shuffle(big_list)
+        for j in big_list:
+            count += 1
+            if count % 4 == 0:
+                temp_str = ''.join(big_list[count-4: count])
+                self.data_list.append(temp_str)
+                print(''.join(big_list[count - 4: count]))
+                #self.data_list.append("butts")
+            
 
     def restart(self):
         self.round += 1
