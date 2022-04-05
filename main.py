@@ -52,7 +52,7 @@ class FuncPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.start_round)
 
         #Creates an entry box for the user to type their answer into
-        self.entry = wx.TextCtrl(parent=self, id=-1, value="", pos=(300, 250), size=(30, 30))
+        self.entry = wx.TextCtrl(parent=self, id=-1, value="", pos=(280, 250), size=(60, 30))
         self.Bind(wx.EVT_TEXT, self.change_prompt)
         
         self.restart()
