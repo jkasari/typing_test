@@ -28,7 +28,7 @@ class FuncPanel(wx.Panel):
         self.SetBackgroundColour("Grey")
         self.data_list = []
         self.start = time.time()
-        self.time_limit = 1.5
+        self.time_limit = 1
         self.temp = ''
         self.result = 0
         self.start_prompt = 'Go'
@@ -129,7 +129,7 @@ class FuncPanel(wx.Panel):
 
     #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
-        #self.data_list = ['`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        self.data_list = ['~', '`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         self.data_list = ['a', 'b', 'c', 'd']
         self.data_dict = {}
         self.init_dict()
@@ -139,11 +139,15 @@ class FuncPanel(wx.Panel):
         big_list = []
         count = 0
         for i in self.data_dict:
+            count += self.data_dict[i]
             for _ in range(int(self.data_dict[i] * 4)):
                 big_list.append(i)
+        self.time_limit =  count / len(self.data_dict)
+        print('Time!!!   :   ', self.time_limit)
         random.shuffle(big_list)
         for j in range(10):
-            temp_str = ''.join(big_list[0: 4])
+            rand = random.randint(3, 6)
+            temp_str = ''.join(big_list[0: rand])
             print(temp_str)
             self.data_list.append(temp_str)
             random.shuffle(big_list)
