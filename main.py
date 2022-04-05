@@ -42,7 +42,6 @@ class FuncPanel(wx.Panel):
         self.init_entry_field()
         self.init_startup()
 
-        
         self.refresh_list()
         self.restart()
 
@@ -112,7 +111,7 @@ class FuncPanel(wx.Panel):
         self.Refresh()
 
 
-    def check_time_round1(self, time_diff):
+    def check_time_round1(self, time_diff: int):
         self.data_dict[str(self.prompt)] = time_diff
         self.data_list.remove(self.prompt)
 
@@ -151,18 +150,22 @@ class FuncPanel(wx.Panel):
                 print(''.join(big_list[count - 4: count]))
                 #self.data_list.append("butts")
             
-
+    # Gives the user the restart button and displays there score if not the first round
     def restart(self):
         self.round += 1
         if self.round == 2:
+            self.calibrate_list()
+        elif self.round == 3:
             self.result_text.SetLabel(self.get_result_string())
+            self.result_text.Show()
         if self.round < 3:
             self.restart_button.SetLabel(f'Start Round {self.round}')
         else: 
             self.restart_button.SetLabel('Restart')
             self.round = 1
+            self.result = 0
+            self.refresh_list()
         self.restart_button.Show()
-        self.result_text.Show()
         self.entry.Hide()
         self.run = False
 
@@ -171,18 +174,16 @@ class FuncPanel(wx.Panel):
 
     # This resets the game back to its original starting position. 
     def start_round(self, e):
-        self.entry.Show()
+        # Hide all the restart stuff
         self.instructions.Hide()
-        self.prompt = self.start_prompt
-        self.prompt_text.Show()
-        self.run = True
-        self.prompt_text.SetLabel(self.prompt)
         self.restart_button.Hide()
         self.result_text.Hide()
-        if self.round == 1:
-            self.refresh_list()
-        elif self.round == 2:
-            self.calibrate_list()
+        # Show all the run time stuff
+        self.entry.Show()
+        self.prompt_text.Show()
+        self.prompt = self.start_prompt
+        self.prompt_text.SetLabel(self.prompt)
+        self.run = True
 
     def init_dict(self):
         for i in self.data_list:
