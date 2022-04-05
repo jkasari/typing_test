@@ -142,14 +142,13 @@ class FuncPanel(wx.Panel):
             for _ in range(int(self.data_dict[i] * 4)):
                 big_list.append(i)
         random.shuffle(big_list)
-        for j in big_list:
-            count += 1
-            if count % 4 == 0:
-                temp_str = ''.join(big_list[count-4: count])
-                self.data_list.append(temp_str)
-                print(''.join(big_list[count - 4: count]))
-                #self.data_list.append("butts")
-            
+        for j in range(10):
+            temp_str = ''.join(big_list[0: 4])
+            print(temp_str)
+            self.data_list.append(temp_str)
+            random.shuffle(big_list)
+    
+
     # Gives the user the restart button and displays there score if not the first round
     def restart(self):
         self.round += 1
