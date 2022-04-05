@@ -71,11 +71,11 @@ class FuncPanel(wx.Panel):
         self.entry.Hide()
 
     def create_instuction_text(self):
-        self.instruct_text = "Welcome to butts"
+        self.instruct_text = ("Welcome to the typing test!   Please enter in the text box what ever is listed in the prompt field. 'Go' will always be the first prompt and is not tracked. Round one will measure your response time for each symbol. Round two will generate ten combos. The time you have to enter the combos is your average response time from round one.")
 
     def init_startup(self):
         self.create_instuction_text()
-        self.instructions = wx.StaticText(self, label=self.instruct_text, pos=(270, 100), size=(100, 100))
+        self.instructions = wx.StaticText(self, label=self.instruct_text, pos=(240, 100), size=(200, 500))
 
     # check to see if the text in the entry matchs that in the prompt
     def change_prompt(self, e):
