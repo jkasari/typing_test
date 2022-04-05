@@ -22,47 +22,66 @@ class MainFrame(wx.Frame):
         self.func_panel = FuncPanel(self)
 
 
-
-
 class FuncPanel(wx.Panel):
     def __init__(self, parent):
         super().__init__(parent=parent)
         self.SetBackgroundColour("Grey")
         self.data_list = []
         self.start = time.time()
-        self.time_limit = 1.5
+        self.time_limit = 1
         self.temp = ''
         self.result = 0
-        self.prompt = 'Go'
+        self.start_prompt = 'Go'
+        self.prompt = self.start_prompt
         self.run = False
         self.round = 0
+        self.instruct_text = '' 
 
-        #Creates a prompt character for the user to type in
+        self.init_prompt_text()
+        self.init_restart_button()
+        self.init_entry_field()
+        self.init_startup()
+
+        self.refresh_list()
+        self.restart()
+
+
+    #Creates a prompt character for the user to type in
+    def init_prompt_text(self):
         self.prompt_text = wx.StaticText(self, label=(self.prompt), pos=(270, 100), size=(100, 100), style=wx.ALIGN_CENTER)
         self.prompt_font = wx.Font(pointSize= 60, family=wx.FONTFAMILY_DEFAULT, style=wx.FONTSTYLE_MAX,  weight=wx.FONTWEIGHT_NORMAL, underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
         self.prompt_text.SetFont(self.prompt_font)
-        self.refresh_list()
+        self.prompt_text.Hide()
 
-        # create a restart button that appears only when the game is over.
-        # Also gives you a final score of how my times you where out of time.
+    
+    # create a restart button that appears only when the game is over.
+    # Also gives you a final score of how my times you where out of time.
+    def init_restart_button(self):
         self.restart_button = wx.Button(self, label='', pos=(270, 370), size=(90, 30))
         self.result_text = wx.StaticText(self, label='', pos=(265, 420), size=(100, 50), style=wx.ALIGN_CENTER)
-        self.result_text.Hide()
-        self.restart_button.Hide()
         self.Bind(wx.EVT_BUTTON, self.start_round)
+        self.restart_button.Hide()
+        self.result_text.Hide()
 
-        #Creates an entry box for the user to type their answer into
-        self.entry = wx.TextCtrl(parent=self, id=-1, value="", pos=(300, 250), size=(30, 30))
+
+    #Creates an entry box for the user to type their answer into
+    def init_entry_field(self):
+        self.entry = wx.TextCtrl(parent=self, id=-1, value="", pos=(280, 250), size=(60, 30))
         self.Bind(wx.EVT_TEXT, self.change_prompt)
-        
-        self.restart()
+        self.entry.Hide()
 
+    def create_instuction_text(self):
+        self.instruct_text = "Welcome to butts"
+
+    def init_startup(self):
+        self.create_instuction_text()
+        self.instructions = wx.StaticText(self, label=self.instruct_text, pos=(270, 100), size=(100, 100))
 
     # check to see if the text in the entry matchs that in the prompt
     def change_prompt(self, e):
         if self.run:
             if self.prompt == self.entry.GetValue():
-                if self.entry.GetValue() == 'Go':
+                if self.entry.GetValue() == self.start_prompt:
                     self.update_prompt()
                 else:
                     self.check_time()
@@ -92,7 +111,7 @@ class FuncPanel(wx.Panel):
         self.Refresh()
 
 
-    def check_time_round1(self, time_diff):
+    def check_time_round1(self, time_diff: int):
         self.data_dict[str(self.prompt)] = time_diff
         self.data_list.remove(self.prompt)
 
@@ -110,7 +129,7 @@ class FuncPanel(wx.Panel):
 
     #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
-        self.data_list = ['`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        self.data_list = ['~', '`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         #self.data_list = ['a', 'b', 'c', 'd']
         self.data_dict = {}
         self.init_dict()
@@ -120,29 +139,37 @@ class FuncPanel(wx.Panel):
         big_list = []
         count = 0
         for i in self.data_dict:
+            count += self.data_dict[i]
             for _ in range(int(self.data_dict[i] * 4)):
                 big_list.append(i)
+        self.time_limit =  count / len(self.data_dict)
+        print('Time!!!   :   ', self.time_limit)
         random.shuffle(big_list)
-        for j in big_list:
-            count += 1
-            if count % 4 == 0:
-                temp_str = ''.join(big_list[count-4: count])
-                self.data_list.append(temp_str)
-                print(''.join(big_list[count - 4: count]))
-                #self.data_list.append("butts")
-            
+        for j in range(10):
+            rand = random.randint(3, 6)
+            temp_str = ''.join(big_list[0: rand])
+            print(temp_str)
+            self.data_list.append(temp_str)
+            random.shuffle(big_list)
+    
 
+    # Gives the user the restart button and displays there score if not the first round
     def restart(self):
         self.round += 1
         if self.round == 2:
+            self.calibrate_list()
+        elif self.round == 3:
             self.result_text.SetLabel(self.get_result_string())
+            self.result_text.Show()
         if self.round < 3:
             self.restart_button.SetLabel(f'Start Round {self.round}')
         else: 
             self.restart_button.SetLabel('Restart')
             self.round = 1
+            self.result = 0
+            self.refresh_list()
         self.restart_button.Show()
-        self.result_text.Show()
+        self.entry.Hide()
         self.run = False
 
     def get_result_string(self):
@@ -150,15 +177,16 @@ class FuncPanel(wx.Panel):
 
     # This resets the game back to its original starting position. 
     def start_round(self, e):
-        self.prompt = 'Go'
-        self.run = True
-        self.prompt_text.SetLabel(self.prompt)
+        # Hide all the restart stuff
+        self.instructions.Hide()
         self.restart_button.Hide()
         self.result_text.Hide()
-        if self.round == 1:
-            self.refresh_list()
-        elif self.round == 2:
-            self.calibrate_list()
+        # Show all the run time stuff
+        self.entry.Show()
+        self.prompt_text.Show()
+        self.prompt = self.start_prompt
+        self.prompt_text.SetLabel(self.prompt)
+        self.run = True
 
     def init_dict(self):
         for i in self.data_list:
