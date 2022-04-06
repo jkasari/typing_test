@@ -58,6 +58,7 @@ class FuncPanel(wx.Panel):
         self.prompt_text.SetFont(self.prompt_font)
         #self.prompt_text.Hide()
 
+    # Creates a vertical sizer and attaches most everything to it
     def init_vertical_sizer(self):
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(0, 50, 0)
@@ -81,7 +82,7 @@ class FuncPanel(wx.Panel):
 
     #Creates an entry box for the user to type their answer into
     def init_entry_field(self):
-        self.entry = wx.TextCtrl(parent=self, id=-1, value="", size=(60, 30), style=wx.ALIGN_CENTER)
+        self.entry = wx.TextCtrl(parent=self, id=-1, value="", size=(60, 30), style=wx.TE_CENTER)
         self.Bind(wx.EVT_TEXT, self.change_prompt)
         self.entry.Hide()
 
@@ -114,7 +115,7 @@ class FuncPanel(wx.Panel):
         elif self.round == 2:
             self.check_time_round2(time_diff)
         
-
+    # Keeps track of if you beat the time limit
     def check_time_round2(self, time_diff: int):
         if time_diff < self.time_limit * len(self.prompt):
             print(f"{self.prompt} gone!")
@@ -125,7 +126,7 @@ class FuncPanel(wx.Panel):
             self.result += 1
         self.Refresh()
 
-
+    # Records your response time in the first round
     def check_time_round1(self, time_diff: int):
         self.data_dict[str(self.prompt)] = time_diff
         self.data_list.remove(self.prompt)
@@ -145,8 +146,8 @@ class FuncPanel(wx.Panel):
 
     #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
-        #self.data_list = ['~', '`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        self.data_list = ['a', 'b', 'c', 'd']
+        self.data_list = ['~', '`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        #self.data_list = ['a', 'b', 'c', 'd']
         self.data_dict = {}
         self.init_dict()
         self.result = 0
