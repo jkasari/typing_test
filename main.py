@@ -188,15 +188,16 @@ class FuncPanel(wx.Panel):
     # Gives the user the restart button and displays there score if not the first round
     def restart(self):
         self.round += 1
-        if self.round == 2:
-            self.calibrate_list()
+        if self.round < 3:
+            self.restart_button.SetLabel(f'Start Round {self.round}')
+            if self.round == 2:
+                self.calibrate_list()
         elif self.round == 3:
             self.result += self.get_round_time()
             self.result_text.SetLabel(self.get_result_string())
-            self.result_text.Show()
+            print(self.result)
             self.prompt_text.Hide()
-        if self.round < 3:
-            self.restart_button.SetLabel(f'Start Round {self.round}')
+            self.result_text.Show()
         else: 
             self.restart_button.SetLabel('Restart')
             self.round = 1
