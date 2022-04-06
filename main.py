@@ -45,15 +45,21 @@ class FuncPanel(wx.Panel):
         self.refresh_list()
         self.restart()
 
+    def init_sizers(self):
+        self.vbox = wx.BoxSizer(wx.VERTICAL)
+
 
     #Creates a prompt character for the user to type in
     def init_prompt_text(self):
-        self.prompt_text = wx.StaticText(self, label=(self.prompt), pos=(270, 100), size=(100, 100), style=wx.ALIGN_CENTER)
+        self.prompt_text = wx.StaticText(self, label=self.prompt, style=wx.ALIGN_CENTER)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        vbox.Add(self.prompt_text, 0, wx.ALIGN_CENTER)
         self.prompt_font = wx.Font(pointSize= 60, family=wx.FONTFAMILY_DEFAULT, style=wx.FONTSTYLE_MAX,  weight=wx.FONTWEIGHT_NORMAL, underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
         self.prompt_text.SetFont(self.prompt_font)
+        self.SetSizer(vbox)
         self.prompt_text.Hide()
 
-    
+
     # create a restart button that appears only when the game is over.
     # Also gives you a final score of how my times you where out of time.
     def init_restart_button(self):
@@ -124,13 +130,14 @@ class FuncPanel(wx.Panel):
             self.start = time.time()
         else:
             self.restart()
+        self.Layout()
         self.entry.SetValue('')
 
 
     #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
-        self.data_list = ['~', '`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        #self.data_list = ['a', 'b', 'c', 'd']
+        #self.data_list = ['~', '`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        self.data_list = ['a', 'b', 'c', 'd']
         self.data_dict = {}
         self.init_dict()
         self.result = 0
@@ -186,6 +193,7 @@ class FuncPanel(wx.Panel):
         self.prompt_text.Show()
         self.prompt = self.start_prompt
         self.prompt_text.SetLabel(self.prompt)
+        self.Layout()
         self.run = True
 
     def init_dict(self):
