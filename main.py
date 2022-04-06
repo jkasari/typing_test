@@ -35,7 +35,7 @@ class FuncPanel(wx.Panel):
         self.start_prompt = 'Go'
         self.prompt = self.start_prompt
         self.run = False
-        self.round = 0
+        self.round = 2
         self.instruct_text = '' 
 
         self.init_prompt_text()
@@ -62,9 +62,9 @@ class FuncPanel(wx.Panel):
     # Creates a vertical sizer and attaches most everything to it
     def init_vertical_sizer(self):
         vbox = wx.BoxSizer(wx.VERTICAL)
+        vbox.Add(self.result_text, 0, wx.ALIGN_CENTER)
         vbox.Add(0, 50, 0)
         vbox.Add(self.prompt_text, 0, wx.ALIGN_CENTER)
-        vbox.Add(self.result_text, 0, wx.ALIGN_CENTER)
         vbox.Add(0, 70, 0)
         vbox.Add(self.entry, 0, wx.ALIGN_CENTER)
         vbox.Add(self.restart_button, 0, wx.ALIGN_CENTER)
@@ -155,7 +155,7 @@ class FuncPanel(wx.Panel):
     #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
         self.data_list = ['~', '`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        self.data_list = ['a', 's', 'd', 'f']
+        self.data_list = ['a', 'f']
         self.data_dict = {}
         self.init_dict()
         self.result = 0
@@ -198,9 +198,8 @@ class FuncPanel(wx.Panel):
             print(self.result)
             self.prompt_text.Hide()
             self.result_text.Show()
-        else: 
-            self.restart_button.SetLabel('Restart')
             self.round = 1
+            self.restart_button.SetLabel('Restart')
             self.result = 0
             self.refresh_list()
         self.restart_button.Show()
