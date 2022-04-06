@@ -1,4 +1,5 @@
 from cProfile import label
+from click import style
 import wx
 import random
 import time
@@ -9,7 +10,7 @@ class TestApp(wx.App):
         self.InitFrame()
 
     def InitFrame(self):
-        frame = MainFrame(parent=None, title="Main Frame", pos=(100, 100), size=(640, 640))
+        frame = MainFrame(parent=None, title="Main Frame", pos=(100, 100), size=(500, 350))
         frame.Show()
 
 
@@ -40,25 +41,40 @@ class FuncPanel(wx.Panel):
         self.init_prompt_text()
         self.init_restart_button()
         self.init_entry_field()
-        self.init_startup()
+        #self.init_startup()
+        self.init_vertical_sizer()
 
         self.refresh_list()
         self.restart()
 
+    def init_sizers(self):
+        self.vbox = wx.BoxSizer(wx.VERTICAL)
+
 
     #Creates a prompt character for the user to type in
     def init_prompt_text(self):
-        self.prompt_text = wx.StaticText(self, label=(self.prompt), pos=(270, 100), size=(100, 100), style=wx.ALIGN_CENTER)
+        self.prompt_text = wx.StaticText(self, label=self.prompt, style=wx.ALIGN_CENTER)
         self.prompt_font = wx.Font(pointSize= 60, family=wx.FONTFAMILY_DEFAULT, style=wx.FONTSTYLE_MAX,  weight=wx.FONTWEIGHT_NORMAL, underline=False, faceName="", encoding=wx.FONTENCODING_DEFAULT)
         self.prompt_text.SetFont(self.prompt_font)
-        self.prompt_text.Hide()
+        #self.prompt_text.Hide()
 
-    
+    # Creates a vertical sizer and attaches most everything to it
+    def init_vertical_sizer(self):
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        vbox.Add(0, 50, 0)
+        vbox.Add(self.prompt_text, 0, wx.ALIGN_CENTER)
+        vbox.Add(0, 70, 0)
+        vbox.Add(self.entry, 0, wx.ALIGN_CENTER)
+        vbox.Add(self.restart_button, 0, wx.ALIGN_CENTER)
+        self.SetSizer(vbox)
+
+
+
     # create a restart button that appears only when the game is over.
     # Also gives you a final score of how my times you where out of time.
     def init_restart_button(self):
         self.restart_button = wx.Button(self, label='', pos=(270, 370), size=(90, 30))
-        self.result_text = wx.StaticText(self, label='', pos=(265, 420), size=(100, 50), style=wx.ALIGN_CENTER)
+        self.result_text = wx.StaticText(self, label='', size=(100, 50), style=wx.ALIGN_CENTER)
         self.Bind(wx.EVT_BUTTON, self.start_round)
         self.restart_button.Hide()
         self.result_text.Hide()
@@ -66,7 +82,7 @@ class FuncPanel(wx.Panel):
 
     #Creates an entry box for the user to type their answer into
     def init_entry_field(self):
-        self.entry = wx.TextCtrl(parent=self, id=-1, value="", pos=(280, 250), size=(60, 30))
+        self.entry = wx.TextCtrl(parent=self, id=-1, value="", size=(60, 30), style=wx.TE_CENTER)
         self.Bind(wx.EVT_TEXT, self.change_prompt)
         self.entry.Hide()
 
@@ -99,7 +115,7 @@ class FuncPanel(wx.Panel):
         elif self.round == 2:
             self.check_time_round2(time_diff)
         
-
+    # Keeps track of if you beat the time limit
     def check_time_round2(self, time_diff: int):
         if time_diff < self.time_limit * len(self.prompt):
             print(f"{self.prompt} gone!")
@@ -110,7 +126,7 @@ class FuncPanel(wx.Panel):
             self.result += 1
         self.Refresh()
 
-
+    # Records your response time in the first round
     def check_time_round1(self, time_diff: int):
         self.data_dict[str(self.prompt)] = time_diff
         self.data_list.remove(self.prompt)
@@ -124,6 +140,7 @@ class FuncPanel(wx.Panel):
             self.start = time.time()
         else:
             self.restart()
+        self.Layout()
         self.entry.SetValue('')
 
 
@@ -178,7 +195,7 @@ class FuncPanel(wx.Panel):
     # This resets the game back to its original starting position. 
     def start_round(self, e):
         # Hide all the restart stuff
-        self.instructions.Hide()
+        #self.instructions.Hide()
         self.restart_button.Hide()
         self.result_text.Hide()
         # Show all the run time stuff
@@ -186,6 +203,7 @@ class FuncPanel(wx.Panel):
         self.prompt_text.Show()
         self.prompt = self.start_prompt
         self.prompt_text.SetLabel(self.prompt)
+        self.Layout()
         self.run = True
 
     def init_dict(self):
