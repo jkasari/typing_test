@@ -155,7 +155,7 @@ class FuncPanel(wx.Panel):
     #Reset the list back the original contents and put the "Go" prompt back up
     def refresh_list(self):
         self.data_list = ['~', '`', '!', '@', '#', '$', '%', '^', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', ':', '|', '/', '<', '>', ';', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        self.data_list = ['a', 'f']
+        #self.data_list = ['a', 'f']
         self.data_dict = {}
         self.init_dict()
         self.result = 0
